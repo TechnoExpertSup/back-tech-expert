@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  customer-DB:
+    image: postgres:alpine
+    container_name: customer-DB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=customerDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  keycloak:
+      image: quay.io/keycloak/keycloak:24.0.1
+      container_name: keycloak
+      ports:
+        - "8090:8080"
+      environment:
+        - KEYCLOAK_ADMIN=admin
+        - KEYCLOAK_ADMIN_PASSWORD=admin
+      command: start-dev
+
+volumes:
+    postgres_data:

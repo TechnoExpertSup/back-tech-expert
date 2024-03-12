@@ -1,0 +1,32 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: customer-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customerDB
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+     hibernate:
+       format_sql: true
+
+    generate-ddl: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+keycloak:
+  realm: technoExpert
+  auth-server-url: http://localhost:8090
+  resource: admin-cli
+  credentials:
+    secret: uEi1WwzI6QCQZMqHUKMvsyT3jD8v6gYl
+
+
