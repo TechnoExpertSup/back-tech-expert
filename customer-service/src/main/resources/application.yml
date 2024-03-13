@@ -26,6 +26,8 @@ keycloak:
   realm: technoExpert
   auth-server-url: http://localhost:8090
   resource: admin-cli
+  username: root
+  password: 1234
   credentials:
     secret: uEi1WwzI6QCQZMqHUKMvsyT3jD8v6gYl
 
