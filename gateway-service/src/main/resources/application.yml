@@ -1,6 +1,18 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: registration_route
+          uri: http://localhost:8082/api/v1/customers/registration
+          predicates:
+           - Path=/api/v1/customers/registration/**
+          filter:
+           - TokenRelay =
+
   security:
     oauth2:
       client:
@@ -14,6 +26,10 @@ spring:
             client-secret: i9q5x8Yzd64FZN9W7EAiMCUVgyqk5Wfb
             authorization-grant-type: authorization_code
             redirect-uri: "http://localhost:8081/login/oauth2/code/gateway-service"
+            scope : openid
+
+
+
 server:
   port: 8081
 

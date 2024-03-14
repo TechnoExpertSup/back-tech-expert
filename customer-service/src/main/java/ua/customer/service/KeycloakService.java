@@ -1,11 +1,14 @@
 package ua.customer.service;
 
+import org.keycloak.representations.idm.UserRepresentation;
 import ua.customer.dto.KeycloakUserRegisterRequest;
 
 public interface KeycloakService {
 
-    void addUserToRealm(KeycloakUserRegisterRequest user);
-    void updateRealmUser(KeycloakUserRegisterRequest user);
+    UserRepresentation findById(String id);
+    UserRepresentation addUserToRealm(KeycloakUserRegisterRequest user);
+    void updateRealmUser(String id,String firstName, String lastName);
 
+    public void sendResetPasswordEmail(String id);
 
 }

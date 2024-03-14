@@ -1,9 +1,11 @@
 package ua.customer.config;
 
+import lombok.Getter;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -12,6 +14,7 @@ public class KeycloakConfig {
 
     @Value("${keycloak.auth-server-url}")
     private String keycloakBaseUrl;
+    @Getter
     @Value("${keycloak.realm}")
     private  String realm;
     @Value("${keycloak.resource}")
@@ -23,6 +26,7 @@ public class KeycloakConfig {
     @Value("${keycloak.password}")
     private String password;
 
+    @Bean
     public Keycloak getInstance(){
 
      return KeycloakBuilder.builder()
