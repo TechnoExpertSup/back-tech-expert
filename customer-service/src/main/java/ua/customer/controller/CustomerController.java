@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.customer.dto.CustomerLoginDto;
 import ua.customer.dto.CustomerResponse;
 import ua.customer.dto.KeycloakUserRegisterRequest;
 import ua.customer.dto.UpdateUserRequest;
@@ -53,6 +54,11 @@ public class CustomerController {
     public ResponseEntity<String> resetCustomerPassword(@PathVariable String id) {
         keycloakService.sendResetPasswordEmail(id);
         return ResponseEntity.ok("An email with instructions on how to change your password has been sent to your email address.");
+    }
+    @PostMapping("/get-token")
+    public ResponseEntity<String> getToken (@RequestBody CustomerLoginDto dto){
+
+        return ResponseEntity.ok(keycloakService.getToken(dto.getUserName(), dto.getPassword()));
     }
 
 }

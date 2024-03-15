@@ -1,17 +1,23 @@
 spring:
-  main:
-    allow-bean-definition-overriding: true
   application:
     name: gateway-service
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay=
       routes:
         - id: registration_route
           uri: http://localhost:8082/api/v1/customers/registration
           predicates:
-           - Path=/api/v1/customers/registration/**
-          filter:
-           - TokenRelay =
+            - Path=/api/v1/customers/registration/**
+        - id : login_route
+          uri : http://localhost:8090/realms/technoExpert/protocol/openid-connect/token
+          predicates:
+            - Path=/login
+
+
+
+
 
   security:
     oauth2:
@@ -23,7 +29,7 @@ spring:
           gateway-service:
             provider: keycloak-provider
             client-id: gateway-service-client
-            client-secret: i9q5x8Yzd64FZN9W7EAiMCUVgyqk5Wfb
+            client-secret: ng8zu3qEVsJOFwIskclhHPlL31OKm94V
             authorization-grant-type: authorization_code
             redirect-uri: "http://localhost:8081/login/oauth2/code/gateway-service"
             scope : openid

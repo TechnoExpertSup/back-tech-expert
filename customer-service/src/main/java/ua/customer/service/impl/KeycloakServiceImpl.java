@@ -5,7 +5,10 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.admin.client.token.TokenManager;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -98,12 +101,25 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     private void sendVerifyEmail(String id) {
-
         getResource().get(id).sendVerifyEmail();
 
     }
 
+    @Override
+    public String getToken(String userName, String password) {
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .serverUrl(" http://localhost:8090")
+                .realm("technoExpert")
+                .clientId("account")
+                .username(userName)
+                .password(password)
+                .build();
+        keycloak.realm("dasdas").
+        return keycloak.tokenManager().getAccessToken().getToken();
+    }
+
     private UsersResource getResource() {
+
         return keycloakConfig.getInstance().realm(keycloakConfig.getRealm()).users();
     }
 }
