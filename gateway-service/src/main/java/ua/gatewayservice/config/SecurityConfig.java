@@ -1,5 +1,6 @@
 package ua.gatewayservice.config;
 
+import org.springframework.cloud.gateway.filter.factory.rewrite.ModifyResponseBodyGatewayFilterFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +22,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange( auth -> auth
                         .pathMatchers(HttpMethod.POST, "/api/v1/customers/registration/**").permitAll()
-                        .pathMatchers(HttpMethod.POST,"/login").permitAll()
+                        .pathMatchers(HttpMethod.POST,"/realms/technoExpert/protocol/openid-connect/token").permitAll()
                 )
                 .build();
 

@@ -7,11 +7,15 @@ import lombok.RequiredArgsConstructor;
 
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.AuthenticationManagementResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.admin.client.token.TokenManager;
+import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.idm.AuthDetailsRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
+import org.keycloak.representations.idm.authorization.AuthorizationResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ua.customer.config.KeycloakConfig;
@@ -24,6 +28,7 @@ import ua.customer.service.KeycloakService;
 import java.util.Collections;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -105,18 +110,27 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     }
 
-    @Override
-    public String getToken(String userName, String password) {
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl(" http://localhost:8090")
-                .realm("technoExpert")
-                .clientId("account")
-                .username(userName)
-                .password(password)
-                .build();
-        keycloak.realm("dasdas").
-        return keycloak.tokenManager().getAccessToken().getToken();
-    }
+//    @Override
+//    public String getToken(String userName, String password) {
+//
+//        UserRepresentation userRepresentation = getResource()
+//                .searchByUsername(userName, false)
+//                .getFirst();
+//        boolean ignoreCase = userRepresentation
+//                .getCredentials()
+//                .getFirst()
+//                .getValue()
+//                .equalsIgnoreCase(password);
+//        if (ignoreCase) {
+//
+//            AuthorizationResponse authorizationResponse = new AuthorizationResponse();
+//            authorizationResponse.setToken(userRepresentation.getAttributes().get("grant_token").getFirst());
+//
+//
+//        }
+//
+//
+//    }
 
     private UsersResource getResource() {
 

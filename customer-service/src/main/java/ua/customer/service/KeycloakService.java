@@ -10,6 +10,6 @@ public interface KeycloakService {
     void updateRealmUser(String id,String firstName, String lastName);
 
     public void sendResetPasswordEmail(String id);
-    String getToken(String userName,String password);
+   // String getToken(String userName,String password);
 
 }

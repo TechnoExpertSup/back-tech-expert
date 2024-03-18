@@ -3,21 +3,19 @@ spring:
     name: gateway-service
   cloud:
     gateway:
-      default-filters:
-        - TokenRelay=
+#      default-filters:
+#        - TokenRelay=
       routes:
         - id: registration_route
           uri: http://localhost:8082/api/v1/customers/registration
           predicates:
             - Path=/api/v1/customers/registration/**
-        - id : login_route
-          uri : http://localhost:8090/realms/technoExpert/protocol/openid-connect/token
-          predicates:
-            - Path=/login
-
-
-
-
+#        - id : login_route
+#          uri : http://localhost:8090/realms/technoExpert/protocol/openid-connect/token
+#          predicates:
+#            - Path=/realms/technoExpert/protocol/openid-connect/token
+#          filters:
+#            - name : tokenAuthenticationFilter
 
   security:
     oauth2:
