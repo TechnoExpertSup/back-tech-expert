@@ -17,6 +17,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 
 import org.keycloak.representations.idm.authorization.AuthorizationResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.customer.config.KeycloakConfig;
 import ua.customer.dto.KeycloakUserRegisterRequest;
@@ -36,7 +38,6 @@ import java.util.Optional;
 public class KeycloakServiceImpl implements KeycloakService {
 
     private final KeycloakConfig keycloakConfig;
-
 
     @Override
     public UserRepresentation findById(String id) {
@@ -79,7 +80,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         UserRepresentation userRepresentation = new UserRepresentation();
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
-        credentialRepresentation.setValue(user.getPassword());
+        credentialRepresentation.setValue(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         userRepresentation.setUsername(user.getUserName());
         userRepresentation.setEmail(user.getEmail());
@@ -110,27 +111,6 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     }
 
-//    @Override
-//    public String getToken(String userName, String password) {
-//
-//        UserRepresentation userRepresentation = getResource()
-//                .searchByUsername(userName, false)
-//                .getFirst();
-//        boolean ignoreCase = userRepresentation
-//                .getCredentials()
-//                .getFirst()
-//                .getValue()
-//                .equalsIgnoreCase(password);
-//        if (ignoreCase) {
-//
-//            AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-//            authorizationResponse.setToken(userRepresentation.getAttributes().get("grant_token").getFirst());
-//
-//
-//        }
-//
-//
-//    }
 
     private UsersResource getResource() {
 

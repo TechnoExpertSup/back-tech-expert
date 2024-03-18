@@ -5,11 +5,11 @@ import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+
+import org.springframework.stereotype.Component;
 
 
-@Configuration
+@Component
 public class KeycloakConfig {
 
     @Value("${keycloak.auth-server-url}")
@@ -26,7 +26,6 @@ public class KeycloakConfig {
     @Value("${keycloak.password}")
     private String password;
 
-    @Bean
     public Keycloak getInstance(){
 
      return KeycloakBuilder.builder()
@@ -39,5 +38,6 @@ public class KeycloakConfig {
                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                .build();
     }
+
 
 }
