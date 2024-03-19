@@ -7,11 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.customer.dto.CustomerLoginDto;
-import ua.customer.dto.CustomerResponse;
-import ua.customer.dto.KeycloakUserRegisterRequest;
-import ua.customer.dto.UpdateUserRequest;
-import ua.customer.repository.CustomerRepository;
+import ua.customer.dto.response.CustomerResponse;
+import ua.customer.dto.request.CustomerRegisterRequest;
+import ua.customer.dto.request.CustomerUpdateRequest;
+import ua.customer.mapper.CustomerMapper;
 import ua.customer.service.KeycloakService;
 
 import java.net.URI;
@@ -21,6 +20,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
+    private final CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
     private final KeycloakService keycloakService;
 
@@ -32,10 +32,10 @@ public class CustomerController {
 
 
     @PostMapping("/registration")
-    public ResponseEntity<CustomerResponse<UserRepresentation>> registration(@Valid @RequestBody KeycloakUserRegisterRequest user,
+    public ResponseEntity<CustomerResponse<UserRepresentation>> registration(@Valid @RequestBody CustomerRegisterRequest user,
                                                                              HttpServletRequest request) {
 
-        UserRepresentation savedUser = keycloakService.addUserToRealm(user);
+        UserRepresentation savedUser = keycloakService.addUserToRealm(customerMapper.toUserRepresentation(user));
 
         return ResponseEntity
                 .created(URI.create(request.getRequestURL().toString() + "/" + savedUser.getId())).
@@ -45,7 +45,7 @@ public class CustomerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateCustomerFirstLastNames(@PathVariable String id, UpdateUserRequest user) {
+    public ResponseEntity<Void> updateCustomerFirstLastNames(@PathVariable String id, CustomerUpdateRequest user) {
         keycloakService.updateRealmUser(id, user.getFirstName(), user.getLastName());
         return ResponseEntity.noContent().build();
     }
@@ -55,10 +55,6 @@ public class CustomerController {
         keycloakService.sendResetPasswordEmail(id);
         return ResponseEntity.ok("An email with instructions on how to change your password has been sent to your email address.");
     }
-    @PostMapping("/get-token")
-    public ResponseEntity<String> getToken (@RequestBody CustomerLoginDto dto){
 
-        return ResponseEntity.ok(keycloakService.getToken(dto.getUserName(), dto.getPassword()));
-    }
 
 }

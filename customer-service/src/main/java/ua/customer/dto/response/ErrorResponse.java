@@ -1,4 +1,4 @@
-package ua.customer.dto;
+package ua.customer.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

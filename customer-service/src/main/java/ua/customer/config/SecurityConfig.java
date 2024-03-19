@@ -20,12 +20,11 @@ public class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(aut -> aut
                         .requestMatchers(HttpMethod.POST,"/api/v1/customers/registration").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v1/customers/get-token").permitAll()
                         .anyRequest()
                         .authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .sessionManagement(sses -> sses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sees -> sees.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }

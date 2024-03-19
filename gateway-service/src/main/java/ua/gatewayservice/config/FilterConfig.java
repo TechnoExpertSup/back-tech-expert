@@ -7,7 +7,6 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import reactor.core.publisher.Mono;
 
 @Configuration
@@ -15,7 +14,7 @@ public class FilterConfig {
 
     @Value("${spring.security.oauth2.auth.uriToken}")
 
-    private  String pathRedirect;
+    private  String urlRedirect;
     @Value("${spring.security.oauth2.auth.grant_type}")
     private String grantType;
     @Value("${spring.security.oauth2.client.registration.gateway-service.client-id}")
@@ -33,16 +32,13 @@ public class FilterConfig {
                                     String modifiedFormData = forModifyRequestBody(s);
                                     return Mono.just(modifiedFormData);
                                 }))
-                        .uri(pathRedirect))
+                        .uri(urlRedirect))
                 .build();
     }
 
     private String forModifyRequestBody(String userNameAndPassword){
-        StringBuilder modifyString = new StringBuilder();
-        String password = userNameAndPassword.substring(userNameAndPassword.indexOf('=') + 1);
-        String userName = userNameAndPassword.substring(userNameAndPassword.indexOf('='));
-        modifyString.append("username=").append(userName);
-        modifyString.append("&password").append(new BCryptPasswordEncoder().encode(password));
+        StringBuilder modifyString = new StringBuilder(userNameAndPassword);
+
         modifyString.append("&grant_type=").append(grantType);
         modifyString.append("&client_id=").append(clientId);
         modifyString.append("&client_secret=").append(clientSecret);

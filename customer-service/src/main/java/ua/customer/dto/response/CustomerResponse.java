@@ -1,4 +1,5 @@
-package ua.customer.dto;
+package ua.customer.dto.response;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +8,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UpdateUserRequest {
+public class CustomerResponse<T> {
 
-    private String firstName;
-    private String lastName;
+    private T body;
+    private String message;
+
 }

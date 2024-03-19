@@ -5,32 +5,19 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
 
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.AuthenticationManagementResource;
 import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.admin.client.token.TokenManager;
-import org.keycloak.representations.AccessTokenResponse;
-import org.keycloak.representations.idm.AuthDetailsRepresentation;
-import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import org.keycloak.representations.idm.authorization.AuthorizationResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ua.customer.config.KeycloakConfig;
-import ua.customer.dto.KeycloakUserRegisterRequest;
 import ua.customer.error.CustomerAlreadyExistException;
 import ua.customer.error.CustomerNotFoundException;
 import ua.customer.service.KeycloakService;
 
 
-import java.util.Collections;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,24 +31,24 @@ public class KeycloakServiceImpl implements KeycloakService {
         return getUserById(id);
     }
 
+
     @Override
-    public UserRepresentation addUserToRealm(KeycloakUserRegisterRequest user) {
-        UserRepresentation userRepresentation = new UserRepresentation();
+    public UserRepresentation addUserToRealm(UserRepresentation user) {
         try (Response response =
-                     getResource().create(createUserRepresentation(user))) {
+                     getResource().create(user)) {
             Optional.ofNullable(response)
                     .ifPresent(resp -> {
                         if (resp.getStatus() == HttpStatus.CREATED.value()) {
                             String userId = resp.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
-                            userRepresentation.setId(userId);
-                            sendVerifyEmail(userId);
+                            user.setId(userId);
+                            sendVerifyEmail(user.getId());
                         } else if (resp.getStatus() == HttpStatus.CONFLICT.value()) {
                             throw new CustomerAlreadyExistException(resp.readEntity(String.class)
                                     .split("\"errorMessage\":\"")[1].split("\"")[0]);
                         }
                     });
         }
-        return getUserById(userRepresentation.getId());
+        return user;
     }
 
     @Override
@@ -76,23 +63,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
 
-    private UserRepresentation createUserRepresentation(KeycloakUserRegisterRequest user) {
-        UserRepresentation userRepresentation = new UserRepresentation();
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
-        credentialRepresentation.setValue(new BCryptPasswordEncoder().encode(user.getPassword()));
-
-        userRepresentation.setUsername(user.getUserName());
-        userRepresentation.setEmail(user.getEmail());
-        userRepresentation.setFirstName(user.getFirstName());
-        userRepresentation.setLastName(user.getLastName());
-        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
-        userRepresentation.setEnabled(true);
-
-        return userRepresentation;
-    }
-
-
     private UserRepresentation getUserById(String id) {
         return Optional
                 .ofNullable(getResource().get(id).toRepresentation())
@@ -101,16 +71,20 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public void sendResetPasswordEmail(String id) {
-        UserRepresentation userRepresentation = getUserById(id);
-        getResource().get(userRepresentation.getId()).executeActionsEmail((List.of("UPDATE_PASSWORD")));
-    }
+    public void sendResetPasswordEmail(String email) {
+        Optional.ofNullable(getResource().searchByEmail(email, false).stream().findFirst().get())
+                .ifPresentOrElse(userRepresentation -> getResource().get(userRepresentation.getId())
+                        .executeActionsEmail((List.of("UPDATE_PASSWORD"))),
+                        () -> {
+                            throw new CustomerNotFoundException(" Customer with this email : " + email + " not found");
+                        });
 
-    private void sendVerifyEmail(String id) {
+    }
+    @Async
+    protected void sendVerifyEmail(String id) {
         getResource().get(id).sendVerifyEmail();
 
     }
-
 
     private UsersResource getResource() {
 

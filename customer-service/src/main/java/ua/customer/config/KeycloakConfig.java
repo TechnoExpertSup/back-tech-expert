@@ -6,10 +6,12 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@EnableAsync
 public class KeycloakConfig {
 
     @Value("${keycloak.auth-server-url}")

@@ -1,4 +1,4 @@
-package ua.customer.dto;
+package ua.customer.dto.request;
 
 import jakarta.validation.constraints.*;
 
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class KeycloakUserRegisterRequest {
+public class CustomerRegisterRequest {
 
     @NotBlank(message = " User name can`t be empty ")
     @NotNull(message = " User name can`t be null ")

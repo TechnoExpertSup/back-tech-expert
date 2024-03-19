@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ua.customer.dto.ErrorResponse;
+import ua.customer.dto.response.ErrorResponse;
 import ua.customer.error.CustomerAlreadyExistException;
 import ua.customer.error.CustomerNotFoundException;
 
@@ -20,8 +20,8 @@ public class CustomerExceptionHandler {
     public ResponseEntity<ErrorResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException exception
             , HttpServletRequest request) {
         String errorMessage = Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage();
-        String requestUri = request.getRequestURL().toString();
-        ErrorResponse errorResponse = new ErrorResponse(errorMessage, requestUri);
+
+        ErrorResponse errorResponse = new ErrorResponse(errorMessage, request.getRequestURI());
 
         return ResponseEntity.badRequest()
                 .body(errorResponse);
@@ -32,7 +32,7 @@ public class CustomerExceptionHandler {
             , HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse(exception.getMessage(), request.getRequestURL().toString()));
+                .body(new ErrorResponse(exception.getMessage(), request.getRequestURI()));
 
     }
     @ExceptionHandler(CustomerNotFoundException.class)
@@ -40,7 +40,7 @@ public class CustomerExceptionHandler {
             ,HttpServletRequest request){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(exception.getMessage(),request.getRequestURL().toString() ));
+                .body(new ErrorResponse(exception.getMessage(),request.getRequestURI()));
 
     }
 
