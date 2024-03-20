@@ -12,7 +12,17 @@ services:
       - POSTGRES_DB=customerDB
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
+  product-db:
+    image: postgres:latest
+    container_name: product-db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=productdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   keycloak:
       image: quay.io/keycloak/keycloak:24.0.1
       container_name: keycloak
