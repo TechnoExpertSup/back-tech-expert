@@ -3,24 +3,19 @@ server:
 spring:
   application:
     name: customer-service
-  datasource:
-    url: jdbc:postgresql://localhost:5432/customerDB
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8090/realms/technoExpert
 
-
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    properties:
-     hibernate:
-       format_sql: true
+#
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    show-sql: true
+#    properties:
+#     hibernate:
+#       format_sql: true
 
     generate-ddl: true
 eureka:

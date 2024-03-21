@@ -1,17 +1,10 @@
 package ua.customer.dto.request;
 
 import jakarta.validation.constraints.*;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 
-@AllArgsConstructor
-@Setter
-@Getter
-@ToString
+
 public class CustomerRegisterRequest {
 
     @NotBlank(message = " User name can`t be empty ")
@@ -32,4 +25,55 @@ public class CustomerRegisterRequest {
     @Size(min = 4, message = " Password must be at least 4 characters long ")
     @NotNull(message = "Password can`t be null")
     private String password;
+
+    public CustomerRegisterRequest(String userName, String email, String firstName, String lastName, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public CustomerRegisterRequest() {
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

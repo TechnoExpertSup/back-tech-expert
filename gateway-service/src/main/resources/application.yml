@@ -8,7 +8,7 @@ spring:
           uri: http://localhost:8082/api/v1/customers/registration
           predicates:
             - Path=/api/v1/customers/registration/**
-        - id: get_customer_route
+        - id: customers_route
           uri : http://localhost:8082/api/v1/customers/{id}
           predicates:
             - Path=/api/v1/customers/{id}

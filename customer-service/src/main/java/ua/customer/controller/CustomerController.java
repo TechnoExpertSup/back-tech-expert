@@ -24,6 +24,7 @@ public class CustomerController {
 
     private final KeycloakService keycloakService;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<UserRepresentation> customerById(@PathVariable String id) {
 
@@ -50,9 +51,9 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/reset-password/{id}")
-    public ResponseEntity<String> resetCustomerPassword(@PathVariable String id) {
-        keycloakService.sendResetPasswordEmail(id);
+    @GetMapping("/reset-password/{email}")
+    public ResponseEntity<String> resetCustomerPassword(@PathVariable String email) {
+        keycloakService.sendResetPasswordEmail(email);
         return ResponseEntity.ok("An email with instructions on how to change your password has been sent to your email address.");
     }
 

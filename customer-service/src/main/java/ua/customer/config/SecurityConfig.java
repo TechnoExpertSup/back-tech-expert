@@ -20,6 +20,7 @@ public class SecurityConfig {
         return httpSecurity
                 .authorizeHttpRequests(aut -> aut
                         .requestMatchers(HttpMethod.POST,"/api/v1/customers/registration").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/customers/reset-password/**").permitAll()
                         .anyRequest()
                         .authenticated()
                 )

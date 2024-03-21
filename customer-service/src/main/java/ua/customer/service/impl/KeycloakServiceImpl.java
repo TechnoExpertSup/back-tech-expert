@@ -1,6 +1,7 @@
 package ua.customer.service.impl;
 
 
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ import ua.customer.service.KeycloakService;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -64,20 +66,22 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 
     private UserRepresentation getUserById(String id) {
-        return Optional
-                .ofNullable(getResource().get(id).toRepresentation())
-                .orElseThrow(() -> new CustomerNotFoundException(" Customer with this id : " + id + " not found"));
-
+      try {
+          return getResource().get(id).toRepresentation();
+      }catch (NotFoundException exception){
+          throw new CustomerNotFoundException(" Customer with this id : " + id + " not found");
+      }
     }
 
     @Override
     public void sendResetPasswordEmail(String email) {
-        Optional.ofNullable(getResource().searchByEmail(email, false).stream().findFirst().get())
-                .ifPresentOrElse(userRepresentation -> getResource().get(userRepresentation.getId())
-                        .executeActionsEmail((List.of("UPDATE_PASSWORD"))),
-                        () -> {
-                            throw new CustomerNotFoundException(" Customer with this email : " + email + " not found");
-                        });
+       try {
+           Optional.ofNullable(getResource().searchByEmail(email, false).stream().findFirst().get())
+                   .ifPresent(userRepresentation -> getResource().get(userRepresentation.getId())
+                           .executeActionsEmail((List.of("UPDATE_PASSWORD"))));
+       }catch (NoSuchElementException exception){
+           throw new CustomerNotFoundException(" Customer with this email : " + email + " not found");
+       }
 
     }
     @Async

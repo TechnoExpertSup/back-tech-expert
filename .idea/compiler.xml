@@ -15,9 +15,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="back-tech-expert" options="" />
       <module name="customer-service" options="-parameters" />
-      <module name="discovery-service" options="-parameters" />
-      <module name="gateway-service" options="-parameters" />
+      <module name="discovery-service" options="" />
+      <module name="gateway-service" options="" />
     </option>
   </component>
 </project>
