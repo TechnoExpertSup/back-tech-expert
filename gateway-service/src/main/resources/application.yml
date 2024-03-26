@@ -14,7 +14,10 @@ spring:
             - Path=/api/v1/customers/{id}
           filters:
             - TokenRelay=
-
+        - id: reset-password-route
+          uri : http://localhost:8082/api/v1/customers/reset-password
+          predicates:
+            - Path=/api/v1/customers/reset-password
 
   security:
     oauth2:

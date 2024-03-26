@@ -1,6 +1,8 @@
 package ua.gatewayservice.config;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -10,10 +12,12 @@ import org.springframework.http.MediaType;
 import reactor.core.publisher.Mono;
 
 @Configuration
+
 public class FilterConfig {
 
-    @Value("${spring.security.oauth2.auth.uriToken}")
+    private final Logger logger = LoggerFactory.getLogger(FilterConfig.class);
 
+    @Value("${spring.security.oauth2.auth.uriToken}")
     private  String urlRedirect;
     @Value("${spring.security.oauth2.auth.grant_type}")
     private String grantType;
@@ -29,6 +33,7 @@ public class FilterConfig {
                         .filters(f -> f.modifyRequestBody(String.class, String.class,
                                 MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                                 (exchange, s) -> {
+                                    logger.info(" Request for authentication with credentials : {}", s);
                                     String modifiedFormData = forModifyRequestBody(s);
                                     return Mono.just(modifiedFormData);
                                 }))

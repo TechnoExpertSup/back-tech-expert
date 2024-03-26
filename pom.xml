@@ -18,7 +18,7 @@
         <spring.boot.maven.plugin.version>3.2.3</spring.boot.maven.plugin.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <spring.boot.dependencies>3.2.3</spring.boot.dependencies>
-
+        <org.slf4j.version>2.0.12</org.slf4j.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -30,13 +30,18 @@
                 <scope>import</scope>
             </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>${spring-cloud.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${org.slf4j.version}</version>
+            </dependency>
 
         </dependencies>
 

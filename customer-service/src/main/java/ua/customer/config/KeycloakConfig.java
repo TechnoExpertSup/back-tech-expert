@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-@EnableAsync
 public class KeycloakConfig {
 
     @Value("${keycloak.auth-server-url}")
@@ -37,7 +36,7 @@ public class KeycloakConfig {
                .clientSecret(secret)
                .username(username)
                .password(password)
-               .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+               .grantType(OAuth2Constants.PASSWORD)
                .build();
     }
 

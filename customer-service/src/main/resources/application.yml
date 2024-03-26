@@ -8,6 +8,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8090/realms/technoExpert
+         # jwks_uri: http://localhost:8090/realms/technoExpert/protocol/openid-connect/certs
 
 #
 #  jpa:
